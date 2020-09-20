@@ -1,26 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { PureComponent } from "react";
+import AudioRecorder from "./AudioRecorder";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import allmight from './allmight.png'
+import Button from "./Button";
+export default class App extends PureComponent {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       accepted:false
+    }
+  }
+  
+  onAccept = () => {
+    this.setState({accepted: true})
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <Router>
+          <Switch>
+            <Route path="">
+              <div>
+                {this.state.accepted ? (
+                  <Switch>
+                    <Route path="/listeA">
+                      <AudioRecorder audioSource="listeA" />
+                    </Route>
+                    <Route path="/listeB">
+                      <AudioRecorder audioSource="listeB" />
+                    </Route>
+                  </Switch>
+                ) : (
+                  <div style={{ display: "flex", padding:'1rem' }}>
+                    <div style={{display:'flex', flexDirection: 'column'}}>
+                      <h1>juke information </h1>
+                      <p>
+                        <Lorem />
+                      </p>
+                      <Button onClick={this.onAccept}>Accept</Button>
+                    </div>
+                    <img
+                      src={allmight}
+                      alt={"all might showing thumbsup"}
+                      style={{ borderRadius: "50%" }}
+                    ></img>
+                  </div>
+                )}
+              </div>
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    );
+  }
 }
 
-export default App;
+
+const Lorem = () => `orem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec fermentum elit. Sed elementum, dolor vel blandit porttitor, mauris ligula fringilla risus, sit amet interdum justo dui ut sapien. Integer id odio vitae dolor dictum molestie sed consectetur diam. Donec mattis diam id risus mattis ornare. Donec ultrices tincidunt dolor id rhoncus. In dolor augue, egestas non venenatis nec, vestibulum eget nisi. Morbi enim eros, sodales accumsan dolor sit amet, auctor finibus ipsum. Vestibulum imperdiet tincidunt ante a suscipit. Praesent non commodo urna. Duis eleifend metus eu leo efficitur laoreet. Nulla non mauris lectus. Pellentesque viverra risus id nisi efficitur varius.
+
+Donec sed posuere ex. Phasellus pretium mattis augue, vitae malesuada diam ullamcorper nec. Suspendisse egestas dolor eu accumsan vehicula. Nulla facilisi. Vestibulum consectetur malesuada massa at gravida. Fusce tincidunt lacus sed diam scelerisque euismod. Cras egestas, lorem non faucibus venenatis, neque magna lacinia nulla, eget pellentesque mi justo eget sapien.
+
+Sed aliquet neque volutpat arcu rutrum mollis. Nullam ut felis urna. Cras tristique neque eget facilisis lacinia. Vivamus nec facilisis mi. In ac augue laoreet, aliquam tortor sit amet, pulvinar mauris. Nulla vitae mi ac erat bibendum efficitur malesuada eget velit. Nunc congue magna sed quam maximus, id lobortis dolor luctus. Proin nec mattis est. Mauris augue felis, porta a vestibulum et, sollicitudin ut ex. Donec in ultrices velit.
+
+Duis vehicula nisi a quam luctus rutrum. Praesent interdum feugiat suscipit. Ut sed scelerisque sapien, in suscipit mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean quis iaculis eros. Sed imperdiet blandit neque, quis congue leo imperdiet id. Nullam venenatis scelerisque tellus, non blandit ipsum varius ut. Morbi et semper urna. Vivamus fringilla metus eu metus rhoncus euismod. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis fringilla orci vitae massa pharetra, ut porttitor massa facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In in sapien enim. Nam quis lectus commodo, dapibus nunc at, bibendum nisi. In condimentum nisl sit amet suscipit suscipit.`;
