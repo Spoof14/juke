@@ -67,7 +67,7 @@ export default class App extends PureComponent {
                       <img
                         src={allmight}
                         alt={"all might showing thumbsup"}
-                        style={{ borderRadius: "50%" }}
+                        style={{ borderRadius: "50%", maxHeight:'90vh' }}
                       ></img>
                     </div>
                   )}
