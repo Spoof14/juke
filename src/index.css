@@ -13,6 +13,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+button:disabled{
+  cursor: not-allowed!important;
+}
 button{
   box-shadow: 0 4px #999;
   background-color: lightgray;
