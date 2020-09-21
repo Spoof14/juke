@@ -3,7 +3,7 @@ import { AudioRecorder, AudioRecorderFunction } from "./AudioRecorder";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import allmight from "./allmight.png";
 import Button from "./Button";
-import { FirebaseAppProvider, useStorage } from "reactfire";
+import { FirebaseAppProvider, useFirestore, useStorage } from "reactfire";
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -196,31 +196,45 @@ const Links = () => {
 };
 
 const Juke = () => {
-  const [items, setItems] = useState();
+  const [items, setItems] = useState(); 
+  const [timestamps, setTimestamps] = useState(); 
   const storage = useStorage().ref();
+  const timestampsRef = useFirestore().collection("timestamps");
+
   useEffect(() => {
     async function getItems() {
       const listeA = await storage.child("clips/listeA").listAll();
       const listeB = await storage.child("clips/listeB").listAll();
       const pretest = await storage.child("clips/pretest").listAll();
+      const timestampItems = await (await timestampsRef.get()).docs.map(doc => doc.data())
+      setTimestamps(timestampItems)
       setItems({ listeA, listeB, pretest });
     }
     getItems();
   }, []);
   console.log("items", items);
+  console.log("timestamps", timestamps);
+  let downloadUrl = "data:text/csv;charset=utf-8," + timestamps?.map(t => [t.user, ...t.timestamps.map(num => Math.floor(num))].join(",")).join("\n")
+
   return (
-    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-      {items &&
-        Object.keys(items).map((list, i) => (
-          <div>
-            <h1>{list}</h1>
-            <div style={{display:'flex', flexDirection: 'column'}}>
-              {items[list].items.map((item) => (
-                <ListItem item={item} />
-              ))}
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 2, display: "flex", justifyContent: "space-evenly" }}>
+        {items &&
+          Object.keys(items).map((list, i) => (
+            <div>
+              <h1>{list}</h1>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {items[list].items.map((item) => (
+                  <ListItem item={item} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", maxHeight: 600 }}>
+        <a href={downloadUrl}>Download timestamps</a>
+                {timestamps && timestamps.map(t => <div>{`${t.user} - ${t.audioSource} - ${t.timestamps.map(num => ' '+ Math.floor(num) )}`}</div>)}
+      </div>
     </div>
   );
 };

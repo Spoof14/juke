@@ -75,7 +75,7 @@ export function AudioRecorderFunction({
   function stop() {
     mediaRecorder?.stop();
     users.add({ user });
-    timestamps.add({ timestamps: clickTimes, user });
+    timestamps.doc(user).set({ timestamps: clickTimes, user });
     let ref = storage.child("clips/" + user + ".mp3");
     setLoading(true);
     ref
