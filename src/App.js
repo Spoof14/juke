@@ -1,89 +1,125 @@
-import React, { PureComponent, Suspense } from "react";
-import {AudioRecorder, AudioRecorderFunction} from "./AudioRecorder";
+import React, { PureComponent, Suspense, useEffect, useState } from "react";
+import { AudioRecorder, AudioRecorderFunction } from "./AudioRecorder";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import allmight from './allmight.png'
+import allmight from "./allmight.png";
 import Button from "./Button";
-import { FirebaseAppProvider } from 'reactfire';
+import { FirebaseAppProvider, useStorage } from "reactfire";
 
 export default class App extends PureComponent {
   constructor(props) {
-    super(props)
-  
+    super(props);
+
     this.state = {
-       accepted:false,
-       user:''
-    }
+      accepted: false,
+      user: "",
+    };
   }
-  
+
   onAccept = () => {
-    this.setState({accepted: true})
-  }
+    this.setState({ accepted: true });
+  };
 
   render() {
-
     const firebaseConfig = {
       /* Paste your config object from Firebase console here */
-        apiKey: "AIzaSyCIML-A8XBuWsGp4cx2cNjcdFXEMuTZyD8",
-        authDomain: "juke-1ad87.firebaseapp.com",
-        databaseURL: "https://juke-1ad87.firebaseio.com",
-        projectId: "juke-1ad87",
-        storageBucket: "juke-1ad87.appspot.com",
-        messagingSenderId: "826491069739",
-        appId: "1:826491069739:web:5a2792c9d8a376fd2a916e"
-     };
+      apiKey: "AIzaSyCIML-A8XBuWsGp4cx2cNjcdFXEMuTZyD8",
+      authDomain: "juke-1ad87.firebaseapp.com",
+      databaseURL: "https://juke-1ad87.firebaseio.com",
+      projectId: "juke-1ad87",
+      storageBucket: "juke-1ad87.appspot.com",
+      messagingSenderId: "826491069739",
+      appId: "1:826491069739:web:5a2792c9d8a376fd2a916e",
+    };
 
     return (
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-    <Suspense fallback={<div>loading</div>}>
+        <Suspense fallback={<div>loading</div>}>
+          <div>
+            <Router>
+              <Switch>
+                <Route path="/juke">
+                  <Juke></Juke>
+                </Route>
+                <Route path="">
+                  <div>
+                    {this.state.accepted ? (
+                      <Switch>
+                        <Route path="/listeA">
+                          <AudioRecorder
+                            audioSource="listeA"
+                            user={this.state.user}
+                          />
+                        </Route>
+                        <Route path="/pretest">
+                          <AudioRecorder
+                            audioSource="pretest"
+                            user={this.state.user}
+                          />
+                        </Route>
+                        <Route path="/listeB">
+                          <AudioRecorder
+                            audioSource="listeB"
+                            user={this.state.user}
+                          />
+                        </Route>
+                        <Links />
+                      </Switch>
+                    ) : (
+                      <div style={{ display: "flex", padding: "1rem" }}>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <h1>Note from Zhu</h1>
+                          <p>你好，首先感谢你参与这次实验😊!</p>
+                          <p>
+                            这是一个关于注意力的小测试，也可以说是一个小游戏。在接下来的测试中，你将听到小明的两周日记。小明是一个10岁的小男孩，他每天都会写日记，
+                            记下一些有意义，或者无意义的事情，大部分内容像都是简单的流水账，比如吃饭、写作业、睡觉等日常行为。
+                          </p>
+                          <p>
+                            两周的日记一共包含了14篇小日记，每篇日记平均有6到7句话，持续45秒左右，每篇日记间隔5秒，两周之间间隔10秒，整个注意力测试时间约为12分钟。日记中除了小明自己，还会出现他的家人，比如爸爸妈妈、朋友小宇以及其他一些不重要的人或物。日记是第一人称视角，小明即为故事中的“我”。
+                          </p>
+                          <p style={{ fontWeight: "bold" }}>
+                            你的任务是：仔细听小明做了什么，并以一件事为单位，在听到小明做了一件事的时候，用鼠标点击一下按钮。
+                          </p>
+                          <p>
+                            {" "}
+                            *注意：其他人做了什么并不重要，注意力请放在小明上。
+                          </p>
+                          <p>
+                            在进入正式测试前，请先输入ID，并做一个约为45秒的pretest，以确保你明白了测试的内容及任务。
+                          </p>
+                          <p>
+                            友情提示：测试结束后，请耐心等待数据上传，不要马上关掉网页哦。
+                          </p>
 
-        <div>
-          <Router>
-            <Switch>
-              <Route path="/juke">
-                <div>test</div>
-              </Route>
-              <Route path="">
-                <div>
-                  {this.state.accepted ? (
-                    <Switch>
-                      <Route path="/listeA">
-                        <AudioRecorder audioSource="listeA" user={this.state.user} />
-                      </Route>
-                      <Route path="/pretest">
-                        <AudioRecorder audioSource="pretest" user={this.state.user} />
-                      </Route>
-                      <Route path="/listeB">
-                        <AudioRecorder audioSource="listeB" user={this.state.user} />
-                      </Route>
-                      <Links />
-                    </Switch>
-                  ) : (
-                    <div style={{ display: "flex", padding: "1rem" }}>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h1>Note from Zhu</h1>
-                        <p>你好，首先感谢你参与这次实验😊!</p>
-                        <p>这是一个关于注意力的小测试，也可以说是一个小游戏。在接下来的测试中，你将听到小明的两周日记。小明是一个10岁的小男孩，他每天都会写日记， 记下一些有意义，或者无意义的事情，大部分内容像都是简单的流水账，比如吃饭、写作业、睡觉等日常行为。</p>
-                        <p>两周的日记一共包含了14篇小日记，每篇日记平均有6到7句话，持续45秒左右，每篇日记间隔5秒，两周之间间隔10秒，整个注意力测试时间约为12分钟。日记中除了小明自己，还会出现他的家人，比如爸爸妈妈、朋友小宇以及其他一些不重要的人或物。日记是第一人称视角，小明即为故事中的“我”。</p>
-                        <p style={{fontWeight:"bold"}}>你的任务是：仔细听小明做了什么，并以一件事为单位，在听到小明做了一件事的时候，用鼠标点击一下按钮。</p>
-                        <p> *注意：其他人做了什么并不重要，注意力请放在小明上。</p>
-                        <p>在进入正式测试前，请先输入ID，并做一个约为45秒的pretest，以确保你明白了测试的内容及任务。</p>
-                        <p>友情提示：测试结束后，请耐心等待数据上传，不要马上关掉网页哦。</p>
-
-                        <input style={{padding:'1rem'}} placeholder='Input ID here' type='text' value={this.state.user} onChange={(e) => this.setState({user:e.target.value})}/>
-                        <Button disabled={!this.state.user} onClick={this.onAccept}>Accept</Button>
+                          <input
+                            style={{ padding: "1rem" }}
+                            placeholder="Input ID here"
+                            type="text"
+                            value={this.state.user}
+                            onChange={(e) =>
+                              this.setState({ user: e.target.value })
+                            }
+                          />
+                          <Button
+                            disabled={!this.state.user}
+                            onClick={this.onAccept}
+                          >
+                            Accept
+                          </Button>
+                        </div>
+                        <img
+                          src={allmight}
+                          alt={"all might showing thumbsup"}
+                          style={{ borderRadius: "50%", maxHeight: "90vh" }}
+                        ></img>
                       </div>
-                      <img
-                        src={allmight}
-                        alt={"all might showing thumbsup"}
-                        style={{ borderRadius: "50%", maxHeight:'90vh' }}
-                      ></img>
-                    </div>
-                  )}
-                </div>
-              </Route>
-            </Switch>
-          </Router>
-        </div>
+                    )}
+                  </div>
+                </Route>
+              </Switch>
+            </Router>
+          </div>
         </Suspense>
       </FirebaseAppProvider>
     );
@@ -157,10 +193,54 @@ const Links = () => {
       </Link>
     </div>
   );
-}
+};
 
 const Juke = () => {
-  
+  const [items, setItems] = useState();
+  const storage = useStorage().ref();
+  useEffect(() => {
+    async function getItems() {
+      const listeA = await storage.child("clips/listeA").listAll();
+      const listeB = await storage.child("clips/listeB").listAll();
+      const pretest = await storage.child("clips/pretest").listAll();
+      setItems({ listeA, listeB, pretest });
+    }
+    getItems();
+  }, []);
+  console.log("items", items);
+  return (
+    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+      {items &&
+        Object.keys(items).map((list, i) => (
+          <div>
+            <h1>{list}</h1>
+            <div style={{display:'flex', flexDirection: 'column'}}>
+              {items[list].items.map((item) => (
+                <ListItem item={item} />
+              ))}
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+};
+
+function ListItem({item}) {
+  const [link, setLink] = useState("");
+  useEffect(() => {
+    item.getDownloadURL().then((url) => {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = function(event) {
+        var blob = xhr.response;
+        setLink(blob)
+      };
+      xhr.open('GET', url);
+      xhr.send();
+    })
+
+  }, []);
+  return <a href={link ? URL.createObjectURL(link) : ''} download={item.name}>{!link ? 'loading' : item.name}</a>;
 }
 
 const Lorem = () => `orem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec fermentum elit. Sed elementum, dolor vel blandit porttitor, mauris ligula fringilla risus, sit amet interdum justo dui ut sapien. Integer id odio vitae dolor dictum molestie sed consectetur diam. Donec mattis diam id risus mattis ornare. Donec ultrices tincidunt dolor id rhoncus. In dolor augue, egestas non venenatis nec, vestibulum eget nisi. Morbi enim eros, sodales accumsan dolor sit amet, auctor finibus ipsum. Vestibulum imperdiet tincidunt ante a suscipit. Praesent non commodo urna. Duis eleifend metus eu leo efficitur laoreet. Nulla non mauris lectus. Pellentesque viverra risus id nisi efficitur varius.
