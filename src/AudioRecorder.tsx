@@ -249,8 +249,8 @@ export class AudioRecorderClass extends PureComponent<Props, State, any> {
     } = this.state;
     this.mediaRecorder?.stop();
     this.props.users.add({ user: this.props.user });
-    this.props.timestamps.add({ timestamps, user: this.props.user });
-    let ref = this.props.storage.child("clips/" + this.props.user + ".mp3");
+    this.props.timestamps.add({ timestamps, user: this.props.user, audioSource: this.props.audioSource });
+    let ref = this.props.storage.child("clips/" + this.props.audioSource + '/' + this.props.audioSource + '_' + this.props.user + ".mp3");
     this.setState({ loading: true, started: false });
     ref
       .put(new Blob(audioChunks, { type: "audio/mp3" }))
