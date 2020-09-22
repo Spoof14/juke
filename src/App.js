@@ -241,20 +241,41 @@ const Juke = () => {
 
 function ListItem({item}) {
   const [link, setLink] = useState("");
+
   useEffect(() => {
-    item.getDownloadURL().then((url) => {
-      var xhr = new XMLHttpRequest();
+    item.getDownloadURL().then(url => setLink(url))
+    // .then((url) => {
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.responseType = 'blob';
+    //   xhr.onload = function(event) {
+    //     var blob = xhr.response;
+    //     setLink(blob)
+    //   };
+    //   xhr.open('GET', url);
+    //   xhr.send();
+    // })
+
+  }, []);
+  const onClick = () => {
+    var xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
       xhr.onload = function(event) {
         var blob = xhr.response;
-        setLink(blob)
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = item.name;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
       };
-      xhr.open('GET', url);
+      xhr.open('GET', link);
       xhr.send();
-    })
-
-  }, []);
-  return <a href={link ? URL.createObjectURL(link) : ''} download={item.name}>{!link ? 'loading' : item.name}</a>;
+  }
+  return <Button onClick={onClick}>Download {item.name}</Button>
+  //return <a href={link ? URL.createObjectURL(link) : ''} download={item.name}>{!link ? 'loading' : item.name}</a>;
 }
 
 const Lorem = () => `orem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec fermentum elit. Sed elementum, dolor vel blandit porttitor, mauris ligula fringilla risus, sit amet interdum justo dui ut sapien. Integer id odio vitae dolor dictum molestie sed consectetur diam. Donec mattis diam id risus mattis ornare. Donec ultrices tincidunt dolor id rhoncus. In dolor augue, egestas non venenatis nec, vestibulum eget nisi. Morbi enim eros, sodales accumsan dolor sit amet, auctor finibus ipsum. Vestibulum imperdiet tincidunt ante a suscipit. Praesent non commodo urna. Duis eleifend metus eu leo efficitur laoreet. Nulla non mauris lectus. Pellentesque viverra risus id nisi efficitur varius.
