@@ -173,7 +173,7 @@ export class AudioRecorderClass extends PureComponent<Props, State, any> {
             tabIndex={0}
             onKeyDown={(e) => console.log("key", e.key)}
           >
-            CLICK WHEN YOU HEAR AN ACTION
+            CLICK HERE
           </button>
         )}
         <p style={{ whiteSpace: "nowrap" }}>
