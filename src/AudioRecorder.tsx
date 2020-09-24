@@ -140,7 +140,7 @@ export function AudioRecorderFunction({
             tabIndex={0}
             onKeyDown={(e) => console.log("key", e.key)}
           >
-            CLICK WHEN YOU HEAR AN ACTION
+            CLICK HERE
           </button>
         )}
         <audio src={audioBlob && URL.createObjectURL(audioBlob)} />
