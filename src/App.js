@@ -70,7 +70,7 @@ export default class App extends PureComponent {
                           style={{ display: "flex", flexDirection: "column" }}
                         >
                           <h1>Note from Zhu</h1>
-                          <p>你好，首先感谢你参与这次实验😊!</p>
+                          <p>你好，首先感谢你参与这次实验<span role="img" aria-label="smile">😊</span>!</p>
                           <p>
                             这是一个关于注意力的小测试，也可以说是一个小游戏。在接下来的测试中，你将听到小明的两周日记。小明是一个10岁的小男孩，他每天都会写日记，
                             记下一些有意义，或者无意义的事情，大部分内容都像是简单的流水账，比如吃饭、写作业、睡觉等日常行为。
