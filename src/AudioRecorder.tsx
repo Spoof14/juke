@@ -89,6 +89,7 @@ export class AudioRecorderClass extends PureComponent<Props, State, any> {
 
     this.mediaRecorder.addEventListener("dataavailable", this.onDataAvailable);
     this.mediaRecorder.onstop = (e) => {
+      audio.pause()
       audio2.pause();
     };
     this.setState({started:true})
@@ -102,10 +103,10 @@ export class AudioRecorderClass extends PureComponent<Props, State, any> {
     this.mediaRecorder?.stop();
     this.props.users.add({ user: this.props.user });
     this.props.timestamps.add({ timestamps, user: this.props.user, audioSource: this.props.audioSource });
-    let ref = this.props.storage.child("clips/" + this.props.audioSource + '/' + this.props.audioSource + '_' + this.props.user + ".mp3");
+    let ref = this.props.storage.child("clips/" + this.props.audioSource + '/' + this.props.audioSource + '_' + this.props.user + ".webm");
     this.setState({ loading: true, started: false });
     ref
-      .put(new Blob(audioChunks, { type: "audio/mp3" }))
+      .put(new Blob(audioChunks, {type:'audio/ogg'}))
       .then(() => this.setState({ loading: false }));
   }
 
@@ -173,7 +174,7 @@ export class AudioRecorderClass extends PureComponent<Props, State, any> {
             tabIndex={0}
             onKeyDown={(e) => console.log("key", e.key)}
           >
-            CLICK WHEN YOU HEAR AN ACTION
+            CLICK HERE
           </button>
         )}
         <p style={{ whiteSpace: "nowrap" }}>

@@ -194,6 +194,13 @@ const Links = () => {
   );
 };
 
+function getDownloadURL(timestamps){
+  let downloadUrl = "data:text/csv;charset=utf-8," + timestamps?.
+    map(t => [t.user, ...t.timestamps.map(num => Math.floor(num))].join(",")).
+    join("\n")
+  return downloadUrl
+}
+
 const Juke = () => {
   const [items, setItems] = useState(); 
   const [timestamps, setTimestamps] = useState(); 
@@ -206,15 +213,19 @@ const Juke = () => {
       const listeB = await storage.child("clips/listeB").listAll();
       const pretest = await storage.child("clips/pretest").listAll();
       const timestampItems = await (await timestampsRef.get()).docs.map(doc => doc.data())
-      setTimestamps(timestampItems)
+      let newTimeStamps = {}
+      timestampItems.forEach(ts => {
+        if(!newTimeStamps[ts.audioSource]) newTimeStamps[ts.audioSource] = []
+        newTimeStamps[ts.audioSource].push(ts)
+      })
+      setTimestamps(newTimeStamps)
       setItems({ listeA, listeB, pretest });
     }
     getItems();
   }, []);
   console.log("items", items);
   console.log("timestamps", timestamps);
-  let downloadUrl = "data:text/csv;charset=utf-8," + timestamps?.map(t => [t.user, ...t.timestamps.map(num => Math.floor(num))].join(",")).join("\n")
-
+  //let downloadUrl = "data:text/csv;charset=utf-8," + timestamps?.map(t => [t.user, ...t.timestamps.map(num => Math.floor(num))].join(",")).join("\n")
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 2, display: "flex", justifyContent: "space-evenly" }}>
@@ -222,6 +233,7 @@ const Juke = () => {
           Object.keys(items).map((list, i) => (
             <div>
               <h1>{list}</h1>
+              <a href={getDownloadURL(timestamps[list])} download={list + 'timestamps.csv'}>Download timestamps</a>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {items[list].items.map((item) => (
                   <ListItem item={item} />
@@ -230,10 +242,10 @@ const Juke = () => {
             </div>
           ))}
       </div>
-      <div style={{ flex: 1, overflowY: "auto", maxHeight: 600 }}>
-        <a href={downloadUrl}>Download timestamps</a>
+      {/* <div style={{ flex: 1, overflowY: "auto", maxHeight: 600 }}>
+        <a href={downloadUrl} download={'timestamps.csv'}>Download timestamps</a>
                 {timestamps && timestamps.map(t => <div>{`${t.user} - ${t.audioSource} - ${t.timestamps.map(num => ' '+ Math.floor(num) )}`}</div>)}
-      </div>
+      </div> */}
     </div>
   );
 };
