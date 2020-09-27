@@ -195,7 +195,7 @@ const Links = () => {
 };
 
 function getDownloadURL(timestamps){
-  let downloadUrl = "data:text/csv;charset=utf-8," + timestamps?.
+  let downloadUrl = "data:text/csv;charset=utf-8,sep=,\r\n\n" + timestamps?.
     map(t => [t.user, ...t.timestamps.map(num => Math.floor(num))].join(",")).
     join("\n")
   return downloadUrl
