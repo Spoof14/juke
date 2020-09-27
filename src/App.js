@@ -233,7 +233,12 @@ const Juke = () => {
           Object.keys(items).map((list, i) => (
             <div>
               <h1>{list}</h1>
-              <a href={getDownloadURL(timestamps[list])} download={list + 'timestamps.csv'}>Download timestamps</a>
+              <a
+                href={getDownloadURL(timestamps[list])}
+                download={list + "timestamps.csv"}
+              >
+                Download timestamps
+              </a>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {items[list].items.map((item) => (
                   <ListItem item={item} />
@@ -242,10 +247,17 @@ const Juke = () => {
             </div>
           ))}
       </div>
-      {/* <div style={{ flex: 1, overflowY: "auto", maxHeight: 600 }}>
-        <a href={downloadUrl} download={'timestamps.csv'}>Download timestamps</a>
-                {timestamps && timestamps.map(t => <div>{`${t.user} - ${t.audioSource} - ${t.timestamps.map(num => ' '+ Math.floor(num) )}`}</div>)}
-      </div> */}
+      <div style={{ flex: 1, overflowY: "auto", maxHeight: 600 }}>
+        {timestamps && Object.keys(timestamps).map((key) =>
+          timestamps[key].map((t) => (
+            <div style={{margin:4, padding:4}}>
+              {`${t.user} - ${t.audioSource} - ${t.timestamps.map(
+                (num) => " " + Math.floor(num)
+              )}`}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
