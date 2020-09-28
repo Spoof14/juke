@@ -250,8 +250,11 @@ const Juke = () => {
       <div style={{ flex: 1, overflowY: "auto", maxHeight: 600 }}>
         {timestamps && Object.keys(timestamps).map((key) =>
           timestamps[key].map((t) => (
-            <div style={{margin:4, padding:4}}>
-              {`${t.user} - ${t.audioSource} - ${t.timestamps.map(
+            <div style={{margin:'8px 8px', padding:4, background:'#333', borderRadius:4}}>
+              <div>ID: {t.user}</div>
+              <div>Audio: {t.audioSource}</div>
+              <div>Clicks:{t.timestamps.length}</div>
+              {`${t.timestamps.map(
                 (num) => " " + Math.floor(num)
               )}`}
             </div>
